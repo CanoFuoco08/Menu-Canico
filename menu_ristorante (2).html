@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Da Gennaro — Pizzeria Tavola Calda</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5EDD8;
+    --cream-dark: #EBE0C4;
+    --terracotta: #C4502A;
+    --terracotta-dark: #9E3B1A;
+    --olive: #5C6B2E;
+    --olive-light: #8A9B4A;
+    --ink: #1A1208;
+    --gold: #C8963E;
+    --gold-light: #E8B85A;
+    --smoke: #8A7F6B;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background-color: var(--cream);
+    color: var(--ink);
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.6;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding: 4rem 2rem;
+    background: radial-gradient(ellipse at 60% 40%, #E8D5AA 0%, var(--cream) 60%);
+    overflow: hidden;
+  }
+  .hero-bg-circle { position: absolute; border-radius: 50%; border: 1px solid rgba(196,80,42,0.12); pointer-events: none; }
+  .hero-bg-circle:nth-child(1) { width: 600px; height: 600px; top: -100px; right: -150px; }
+  .hero-bg-circle:nth-child(2) { width: 400px; height: 400px; bottom: -80px; left: -100px; }
+  .hero-bg-circle:nth-child(3) { width: 900px; height: 900px; top: 50%; left: 50%; transform: translate(-50%,-50%); border-color: rgba(196,80,42,0.05); }
+  .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(5rem, 13vw, 11rem); font-weight: 900; line-height: 0.9; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 0.4rem; opacity: 0; animation: fadeUp 0.9s 0.35s forwards; }
+  .hero-title em { font-style: italic; color: var(--terracotta); display: block; }
+  .hero-sub { font-family: 'Crimson Pro', serif; font-style: italic; font-size: clamp(1.1rem, 2.5vw, 1.5rem); color: var(--smoke); margin-top: 1.5rem; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.9s 0.5s forwards; }
+  .hero-divider { display: flex; align-items: center; gap: 1rem; opacity: 0; animation: fadeUp 0.9s 0.65s forwards; }
+  .hero-divider span { width: 60px; height: 1px; background: var(--terracotta); }
+  .hero-divider .diamond { width: 8px; height: 8px; background: var(--terracotta); transform: rotate(45deg); }
+  .hero-info { margin-top: 2.5rem; display: flex; gap: 3rem; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--smoke); opacity: 0; animation: fadeUp 0.9s 0.8s forwards; flex-wrap: wrap; justify-content: center; }
+  .hero-info div { display: flex; flex-direction: column; gap: 4px; align-items: center; }
+  .hero-info strong { color: var(--ink); font-size: 13px; }
+  .scroll-hint { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; color: var(--smoke); opacity: 0; animation: fadeUp 1s 1.2s forwards; }
+  .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--terracotta), transparent); animation: scrollPulse 2s 1.5s infinite; }
+
+  /* ── NAV ── */
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(245,237,216,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(196,80,42,0.15); padding: 1rem 2rem; display: flex; justify-content: center; gap: 0.5rem; flex-wrap: wrap; }
+  nav a { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink); text-decoration: none; padding: 6px 14px; border-radius: 2px; transition: background 0.2s, color 0.2s; }
+  nav a:hover { background: var(--terracotta); color: var(--cream); }
+
+  /* ── SECTIONS ── */
+  section { max-width: 960px; margin: 0 auto; padding: 5rem 2rem; }
+  .section-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 3rem; }
+  .section-num { font-family: 'Playfair Display', serif; font-size: 5rem; font-weight: 900; color: var(--terracotta); opacity: 0.15; line-height: 1; flex-shrink: 0; }
+  .section-title-wrap { border-left: 3px solid var(--terracotta); padding-left: 1.2rem; }
+  .section-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--terracotta); margin-bottom: 4px; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; line-height: 1.1; color: var(--ink); }
+  .section-title em { font-style: italic; color: var(--terracotta); }
+
+  /* ── MENU ITEMS ── */
+  .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr)); gap: 0; }
+  .menu-item { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; padding: 1.3rem 0; border-bottom: 1px solid rgba(26,18,8,0.1); position: relative; transition: background 0.2s, padding 0.2s; cursor: pointer; }
+  .menu-item:hover { background: rgba(196,80,42,0.06); padding-left: 0.5rem; padding-right: 0.5rem; margin: 0 -0.5rem; }
+  .menu-item-click-hint { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--terracotta); opacity: 0; transition: opacity 0.2s; margin-top: 5px; }
+  .menu-item:hover .menu-item-click-hint { opacity: 1; }
+  .menu-item-info { flex: 1; }
+  .menu-item-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+  .menu-item-desc { font-size: 0.92rem; color: var(--smoke); font-style: italic; line-height: 1.4; }
+  .menu-item-badges { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+  .badge { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; }
+  .badge-chef { background: var(--terracotta); color: var(--cream); }
+  .badge-veg  { background: var(--olive); color: var(--cream); }
+  .badge-new  { background: var(--gold); color: var(--ink); }
+  .menu-item-price { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--terracotta); white-space: nowrap; flex-shrink: 0; }
+
+  /* ── PIZZA CARDS ── */
+  .pizza-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.5rem; }
+  .pizza-card { background: white; border: 1px solid rgba(26,18,8,0.08); border-radius: 4px; padding: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; position: relative; overflow: hidden; cursor: pointer; }
+  .pizza-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--terracotta); transform: scaleX(0); transform-origin: left; transition: transform 0.3s; }
+  .pizza-card:hover::before { transform: scaleX(1); }
+  .pizza-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(26,18,8,0.1); }
+  .pizza-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+  .pizza-ing { font-size: 0.88rem; color: var(--smoke); font-style: italic; line-height: 1.5; margin-bottom: 1rem; }
+  .pizza-footer { display: flex; justify-content: space-between; align-items: center; }
+  .pizza-price { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 900; color: var(--terracotta); }
+  .pizza-price sup { font-size: 0.7rem; vertical-align: super; }
+  .pizza-click-hint { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--terracotta); opacity: 0; transition: opacity 0.2s; margin-top: 8px; }
+  .pizza-card:hover .pizza-click-hint { opacity: 1; }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(26,18,8,0.75);
+    backdrop-filter: blur(6px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--cream);
+    border-radius: 6px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: translateY(24px) scale(0.97);
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    box-shadow: 0 40px 80px rgba(26,18,8,0.3);
+  }
+  .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+
+  .modal-header-bar {
+    background: var(--ink);
+    border-radius: 6px 6px 0 0;
+    padding: 1.4rem 1.8rem 1.2rem;
+  }
+  .modal-header-eyebrow { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+  .modal-header-title { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--cream); line-height: 1.1; }
+
+  .modal-body { padding: 1.6rem 1.8rem 1.8rem; }
+  .modal-desc { font-size: 1rem; color: var(--smoke); font-style: italic; line-height: 1.6; margin-bottom: 1.3rem; border-bottom: 1px solid rgba(26,18,8,0.08); padding-bottom: 1.2rem; }
+
+  .modal-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 1.4rem;
+  }
+  .modal-info-cell {
+    background: white;
+    border: 1px solid rgba(26,18,8,0.08);
+    border-radius: 3px;
+    padding: 10px 12px;
+  }
+  .modal-info-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    margin-bottom: 3px;
+  }
+  .modal-info-value {
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.95rem;
+    color: var(--ink);
+    line-height: 1.4;
+  }
+  .modal-info-cell.full { grid-column: 1 / -1; }
+
+  .modal-sezione-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(26,18,8,0.12);
+    margin-top: 1.2rem;
+  }
+
+  .modal-allergeni-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(26,18,8,0.12);
+  }
+  .allergeni-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.5rem; }
+  .allergene-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    border: 1px solid rgba(26,18,8,0.1);
+    border-radius: 3px;
+    padding: 5px 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink);
+  }
+  .allergene-tag.present { border-color: var(--terracotta); background: rgba(196,80,42,0.06); }
+  .allergene-tag.present .allergene-dot { background: var(--terracotta); }
+  .allergene-tag.absent .allergene-dot { background: #C8C0B0; }
+  .allergene-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  .modal-note {
+    font-size: 0.82rem;
+    color: var(--smoke);
+    font-style: italic;
+    padding: 10px 14px;
+    background: rgba(196,80,42,0.05);
+    border-left: 3px solid var(--terracotta);
+    border-radius: 0 3px 3px 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(26,18,8,0.5);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    line-height: 1;
+  }
+  .modal-close:hover { background: var(--terracotta); }
+
+  .modal-price-row { display: flex; justify-content: space-between; align-items: center; }
+  .modal-price { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; color: var(--terracotta); }
+
+  /* ── BANNER ── */
+  .banner { background: var(--ink); color: var(--cream); text-align: center; padding: 5rem 2rem; position: relative; overflow: hidden; }
+  .banner::before { content: '🍕'; position: absolute; font-size: 20rem; opacity: 0.04; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+  .banner-quote { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.5rem, 3vw, 2.5rem); max-width: 700px; margin: 0 auto 1rem; line-height: 1.3; color: var(--cream); }
+  .banner-attr { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); }
+
+  /* ── FOOTER ── */
+  footer { background: var(--ink); color: var(--smoke); text-align: center; padding: 3rem 2rem; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; line-height: 2; }
+  footer strong { color: var(--gold); }
+  .section-divider { width: 100%; height: 2px; background: linear-gradient(to right, transparent, var(--terracotta), transparent); margin: 0; opacity: 0.3; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes scrollPulse { 0%, 100% { opacity: 0.4; transform: scaleY(1); } 50% { opacity: 1; transform: scaleY(1.2); } }
+
+  @media (max-width: 600px) {
+    .hero-info { gap: 1.5rem; }
+    .menu-grid { grid-template-columns: 1fr; }
+    .pizza-grid { grid-template-columns: 1fr; }
+    .section-header { flex-direction: column; align-items: flex-start; }
+    .section-num { font-size: 3rem; }
+    .modal-title { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal" id="modal">
+    <button class="modal-close" id="modalClose" aria-label="Chiudi">✕</button>
+    <div class="modal-header-bar">
+      <div class="modal-header-eyebrow" id="modalCategory"></div>
+      <div class="modal-header-title" id="modalTitle"></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="modal-info-grid" id="modalInfoGrid"></div>
+      <div class="modal-sezione-title">Allergeni presenti</div>
+      <div class="allergeni-grid" id="allergeniGrid"></div>
+      <div class="modal-note">⚠ Per allergie gravi o intolleranze, informate sempre il personale prima di ordinare. Possibile contaminazione crociata in cucina.</div>
+      <div class="modal-price-row">
+        <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--smoke);">Prezzo</span>
+        <span class="modal-price" id="modalPrice"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg-circle"></div>
+  <div class="hero-bg-circle"></div>
+  <div class="hero-bg-circle"></div>
+  <p class="hero-eyebrow">Napoli · Dal 1987</p>
+  <h1 class="hero-title">Da<em>Gennaro</em></h1>
+  <p class="hero-sub">Pizzeria · Tavola Calda · Tradizione di famiglia</p>
+  <div class="hero-divider">
+    <span></span>
+    <div class="diamond"></div>
+    <span></span>
+  </div>
+  <div class="hero-info">
+    <div><span>Aperto</span><strong>12:00 – 15:00</strong><strong>19:00 – 23:00</strong></div>
+    <div><span>Dove</span><strong>Via Tribunali, 44</strong><strong>Napoli</strong></div>
+    <div><span>Telefono</span><strong>081 45 67 89</strong></div>
+  </div>
+  <div class="scroll-hint"><span>Scopri il menu</span><div class="scroll-line"></div></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#antipasti">Antipasti</a>
+  <a href="#primi">Primi</a>
+  <a href="#secondi">Secondi</a>
+  <a href="#pizze">Pizze</a>
+  <a href="#contorni">Contorni</a>
+  <a href="#dolci">Dolci</a>
+  <a href="#bevande">Bevande</a>
+</nav>
+
+<!-- ANTIPASTI -->
+<section id="antipasti">
+  <div class="section-header">
+    <div class="section-num">01</div>
+    <div class="section-title-wrap">
+      <p class="section-eyebrow">Per iniziare</p>
+      <h2 class="section-title">Anti<em>pasti</em></h2>
+    </div>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-item" data-id="bruschette">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Bruschette al Pomodoro</div>
+        <div class="menu-item-desc">Pane casereccio tostato, pomodoro fresco, basilico, aglio e olio EVO di Ravello</div>
+        <div class="menu-item-badges"><span class="badge badge-veg">Vegetariano</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 6</div>
+    </div>
+    <div class="menu-item" data-id="bufala">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Mozzarella di Bufala DOP</div>
+        <div class="menu-item-desc">Bufala campana con pomodorini del piennolo, origano selvatico e filo d'olio</div>
+        <div class="menu-item-badges"><span class="badge badge-veg">Vegetariano</span><span class="badge badge-chef">Consigliato</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 9</div>
+    </div>
+    <div class="menu-item" data-id="frittura">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Frittura Mista Napoletana</div>
+        <div class="menu-item-desc">Crocchè di patate, pasta cresciuta, zeppoline di alga, montanarine con pomodoro</div>
+        <div class="menu-item-badges"><span class="badge badge-chef">Consigliato</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 11</div>
+    </div>
+    <div class="menu-item" data-id="salumi">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Salumi e Formaggi del Territorio</div>
+        <div class="menu-item-desc">Selezione di salame napoli, soppressata, caciocavallo stagionato e provola affumicata</div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 14</div>
+    </div>
+    <div class="menu-item" data-id="alici">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Alici di Cetara Marinate</div>
+        <div class="menu-item-desc">Alici fresche in olio e limone, capperi di Pantelleria, peperoncino e prezzemolo</div>
+        <div class="menu-item-badges"><span class="badge badge-chef">Consigliato</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 10</div>
+    </div>
+    <div class="menu-item" data-id="parmigiana">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Parmigiana di Melanzane</div>
+        <div class="menu-item-desc">La classica al forno, con fior di latte, basilico e sugo di pomodoro San Marzano</div>
+        <div class="menu-item-badges"><span class="badge badge-veg">Vegetariano</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 9</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- PRIMI -->
+<section id="primi">
+  <div class="section-header">
+    <div class="section-num">02</div>
+    <div class="section-title-wrap">
+      <p class="section-eyebrow">La pasta di Gennaro</p>
+      <h2 class="section-title">Primi <em>Piatti</em></h2>
+    </div>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-item" data-id="ragu">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Spaghetti al Ragù Napoletano</div>
+        <div class="menu-item-desc">Ragù della nonna, cotto sei ore con carne mista, cipolle dorate e vino rosso</div>
+        <div class="menu-item-badges"><span class="badge badge-chef">Firma del cuoco</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 14</div>
+    </div>
+    <div class="menu-item" data-id="genovese">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Rigatoni alla Genovese</div>
+        <div class="menu-item-desc">Cipolle di Montoro stufate lentamente con manzo, profumo di alloro e parmigiano</div>
+        <div class="menu-item-badges"><span class="badge badge-chef">Consigliato</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 13</div>
+    </div>
+    <div class="menu-item" data-id="pastaefagioli">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Pasta e Fagioli con Cotiche</div>
+        <div class="menu-item-desc">Fagioli borlotti, cotiche di maiale, pasta mista, rosmarino e peperoncino.</div>
+        <div class="menu-item-badges"><span class="badge badge-new">Stagionale</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 11</div>
+    </div>
+    <div class="menu-item" data-id="paccheri">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Paccheri al Pomodoro e Basilico</div>
+        <div class="menu-item-desc">Paccheri di Gragnano IGP, pomodori San Marzano DOP, basilico fresco e parmigiano</div>
+        <div class="menu-item-badges"><span class="badge badge-veg">Vegetariano</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 12</div>
+    </div>
+    <div class="menu-item" data-id="vongole">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Linguine alle Vongole Veraci</div>
+        <div class="menu-item-desc">Vongole di mare aperto, aglio, prezzemolo, vino bianco e un tocco di peperoncino fresco</div>
+        <div class="menu-item-badges"><span class="badge badge-chef">Consigliato</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 16</div>
+    </div>
+    <div class="menu-item" data-id="soffritto">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Zuppa di Soffritto Napoletano</div>
+        <div class="menu-item-desc">Frattaglie di maiale, concentrato di pomodoro, peperoncino, vino rosso.</div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 12</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SECONDI -->
+<section id="secondi">
+  <div class="section-header">
+    <div class="section-num">03</div>
+    <div class="section-title-wrap">
+      <p class="section-eyebrow">Carne e pesce</p>
+      <h2 class="section-title">Secondi <em>Piatti</em></h2>
+    </div>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-item" data-id="braciole">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Braciole al Ragù</div>
+        <div class="menu-item-desc">Involtini di manzo ripieni di uova sode, prezzemolo e formaggio, cotti nel sugo per ore</div>
+        <div class="menu-item-badges"><span class="badge badge-chef">Firma del cuoco</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 17</div>
+    </div>
+    <div class="menu-item" data-id="polpette">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Polpette al Sugo della Nonna</div>
+        <div class="menu-item-desc">Manzo e maiale, mollica di pane, pecorino, uovo e noce moscata. Tre per porzione.</div>
+        <div class="menu-item-badges"><span class="badge badge-chef">Consigliato</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 14</div>
+    </div>
+    <div class="menu-item" data-id="baccala">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Baccalà alla Napoletana</div>
+        <div class="menu-item-desc">Baccalà dissalato, pomodoro, olive nere di Gaeta, capperi e pinoli, profumo di alloro</div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 16</div>
+    </div>
+    <div class="menu-item" data-id="pollo">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Pollo alla Cacciatora</div>
+        <div class="menu-item-desc">Pollo ruspante, pomodoro, olive, capperi, rosmarino e vino bianco secco</div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 15</div>
+    </div>
+    <div class="menu-item" data-id="salsiccia">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Salsiccia e Friarielli</div>
+        <div class="menu-item-desc">Salsiccia di suino alla brace con friarielli saltati in padella, aglio e peperoncino</div>
+        <div class="menu-item-badges"><span class="badge badge-new">Stagionale</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 14</div>
+    </div>
+    <div class="menu-item" data-id="paranza">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Fritto di Paranza</div>
+        <div class="menu-item-desc">Pesce azzurro fresco del giorno, infarinato e fritto in olio di semi ad alta temperatura</div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 18</div>
+    </div>
+  </div>
+</section>
+
+<!-- BANNER -->
+<div class="banner">
+  <p class="banner-quote">"La cucina è un atto d'amore. Chiunque ti dica il contrario, o non cucina, o non ama."</p>
+  <p class="banner-attr">— Don Gennaro Esposito, fondatore</p>
+</div>
+
+<!-- PIZZE -->
+<section id="pizze">
+  <div class="section-header">
+    <div class="section-num">04</div>
+    <div class="section-title-wrap">
+      <p class="section-eyebrow">Forno a legna · Impasto 48h</p>
+      <h2 class="section-title">Le nostre <em>Pizze</em></h2>
+    </div>
+  </div>
+  <p style="color:var(--smoke); font-style:italic; margin-bottom:2.5rem; max-width:560px;">Impasto a lenta lievitazione di 48 ore, farina tipo 1 macinata a pietra, cottura a 485°C nel forno a legna di tufo.</p>
+  <div class="pizza-grid">
+    <div class="pizza-card" data-id="margherita">
+      <div class="pizza-name">Margherita</div>
+      <div class="pizza-ing">San Marzano DOP, fior di latte di Agerola, basilico fresco, olio EVO</div>
+      <div class="pizza-footer">
+        <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge badge-veg">Vegetariano</span><span class="badge badge-chef">Classica</span></div>
+        <div class="pizza-price"><sup>€</sup>9</div>
+      </div>
+      <div class="pizza-click-hint">↗ Vedi foto e allergeni</div>
+    </div>
+    <div class="pizza-card" data-id="marinara">
+      <div class="pizza-name">Marinara</div>
+      <div class="pizza-ing">San Marzano DOP, aglio, origano selvatico, olio EVO. Senza latticini.</div>
+      <div class="pizza-footer">
+        <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge badge-veg">Vegetariano</span></div>
+        <div class="pizza-price"><sup>€</sup>7</div>
+      </div>
+      <div class="pizza-click-hint">↗ Vedi foto e allergeni</div>
+    </div>
+    <div class="pizza-card" data-id="diavola">
+      <div class="pizza-name">Diavola</div>
+      <div class="pizza-ing">San Marzano, fior di latte, salame piccante calabrese, peperoncino fresco</div>
+      <div class="pizza-footer">
+        <div></div>
+        <div class="pizza-price"><sup>€</sup>11</div>
+      </div>
+      <div class="pizza-click-hint">↗ Vedi foto e allergeni</div>
+    </div>
+    <div class="pizza-card" data-id="quattrostagioni">
+      <div class="pizza-name">Quattro Stagioni</div>
+      <div class="pizza-ing">Pomodoro, fior di latte, prosciutto cotto, funghi porcini, carciofi, olive nere</div>
+      <div class="pizza-footer">
+        <div></div>
+        <div class="pizza-price"><sup>€</sup>13</div>
+      </div>
+      <div class="pizza-click-hint">↗ Vedi foto e allergeni</div>
+    </div>
+    <div class="pizza-card" data-id="montanara">
+      <div class="pizza-name">Montanara Fritta</div>
+      <div class="pizza-ing">Fritta e poi infornata: pomodoro, fior di latte, ricotta, basilico.</div>
+      <div class="pizza-footer">
+        <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge badge-chef">Specialità</span></div>
+        <div class="pizza-price"><sup>€</sup>12</div>
+      </div>
+      <div class="pizza-click-hint">↗ Vedi foto e allergeni</div>
+    </div>
+    <div class="pizza-card" data-id="cosacca">
+      <div class="pizza-name">Cosacca</div>
+      <div class="pizza-ing">San Marzano DOP, pecorino romano grattugiato, basilico, olio EVO. Niente mozzarella.</div>
+      <div class="pizza-footer">
+        <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge badge-new">Storica</span></div>
+        <div class="pizza-price"><sup>€</sup>9</div>
+      </div>
+      <div class="pizza-click-hint">↗ Vedi foto e allergeni</div>
+    </div>
+    <div class="pizza-card" data-id="salsicciapizza">
+      <div class="pizza-name">Salsiccia e Friarielli</div>
+      <div class="pizza-ing">Fior di latte, salsiccia di maiale, friarielli saltati, scaglie di parmigiano</div>
+      <div class="pizza-footer">
+        <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge badge-chef">Consigliata</span></div>
+        <div class="pizza-price"><sup>€</sup>13</div>
+      </div>
+      <div class="pizza-click-hint">↗ Vedi foto e allergeni</div>
+    </div>
+    <div class="pizza-card" data-id="bufalaecrudo">
+      <div class="pizza-name">Bufala e Crudo</div>
+      <div class="pizza-ing">Pomodoro, bufala DOP, prosciutto crudo di Parma 24 mesi, rucola, grana a scaglie</div>
+      <div class="pizza-footer">
+        <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge badge-new">Novità</span></div>
+        <div class="pizza-price"><sup>€</sup>15</div>
+      </div>
+      <div class="pizza-click-hint">↗ Vedi foto e allergeni</div>
+    </div>
+    <div class="pizza-card" data-id="ripieno">
+      <div class="pizza-name">Ripieno al Forno</div>
+      <div class="pizza-ing">Ricotta, salame, cicoli, pepe nero. Chiusa e cotta al forno, aperta al tavolo.</div>
+      <div class="pizza-footer">
+        <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="badge badge-chef">Firma</span></div>
+        <div class="pizza-price"><sup>€</sup>14</div>
+      </div>
+      <div class="pizza-click-hint">↗ Vedi foto e allergeni</div>
+    </div>
+  </div>
+  <p style="margin-top:1.5rem; font-size:0.88rem; color:var(--smoke); font-style:italic;">Aggiunta toppings: mozzarella +€2 · bufala +€4 · prosciutto crudo +€3 · impasto integrale disponibile.</p>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- CONTORNI -->
+<section id="contorni">
+  <div class="section-header">
+    <div class="section-num">05</div>
+    <div class="section-title-wrap">
+      <p class="section-eyebrow">A lato</p>
+      <h2 class="section-title">Con<em>torni</em></h2>
+    </div>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-item" data-id="patate">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Patate al Forno con Rosmarino</div>
+        <div class="menu-item-desc">Patate novelle con rosmarino, aglio e olio EVO</div>
+        <div class="menu-item-badges"><span class="badge badge-veg">Vegetariano</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 5</div>
+    </div>
+    <div class="menu-item" data-id="friariellicont">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Friarielli Saltati</div>
+        <div class="menu-item-desc">Cime di rapa napoletane, aglio, olio e peperoncino</div>
+        <div class="menu-item-badges"><span class="badge badge-veg">Vegetariano</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 5</div>
+    </div>
+    <div class="menu-item" data-id="insalata">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Insalata Mista</div>
+        <div class="menu-item-desc">Verdure di stagione, pomodorini, cipolla di tropea, olive e origano</div>
+        <div class="menu-item-badges"><span class="badge badge-veg">Vegetariano</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 5</div>
+    </div>
+    <div class="menu-item" data-id="melanzane">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Melanzane a Funghetto</div>
+        <div class="menu-item-desc">Melanzane a cubetti in padella con pomodoro, basilico e aglio</div>
+        <div class="menu-item-badges"><span class="badge badge-veg">Vegetariano</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 5</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- DOLCI -->
+<section id="dolci">
+  <div class="section-header">
+    <div class="section-num">06</div>
+    <div class="section-title-wrap">
+      <p class="section-eyebrow">Il finale</p>
+      <h2 class="section-title">Dol<em>ci</em></h2>
+    </div>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-item" data-id="baba">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Babà al Rum Napoletano</div>
+        <div class="menu-item-desc">Babà soffice, bagna al rum invecchiato e crema chantilly. Il re della pasticceria napoletana.</div>
+        <div class="menu-item-badges"><span class="badge badge-chef">Firma</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 6</div>
+    </div>
+    <div class="menu-item" data-id="sfogliatella">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Sfogliatella Riccia</div>
+        <div class="menu-item-desc">Sfoglia croccante ripiena di ricotta, semolino, canditi e cannella. Tiepida, come si deve.</div>
+        <div class="menu-item-badges"><span class="badge badge-chef">Consigliato</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 5</div>
+    </div>
+    <div class="menu-item" data-id="pastiera">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Pastiera Napoletana</div>
+        <div class="menu-item-desc">Grano cotto, ricotta, canditi e fior d'arancio. Disponibile tutto l'anno.</div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 6</div>
+    </div>
+    <div class="menu-item" data-id="delizia">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Delizia al Limone</div>
+        <div class="menu-item-desc">Pan di Spagna, crema al limone di Sorrento e glassa fondente. Fresca e profumata.</div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 6</div>
+    </div>
+    <div class="menu-item" data-id="tiramisu">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Tiramisù della Casa</div>
+        <div class="menu-item-desc">Savoiardi, mascarpone, caffè napoletano e cacao amaro. Niente panna montata.</div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 6</div>
+    </div>
+    <div class="menu-item" data-id="gelato">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Gelato Artigianale (2 gusti)</div>
+        <div class="menu-item-desc">Pistacchio di Bronte, nocciola, stracciatella, limone di Sorrento, cioccolato fondente</div>
+        <div class="menu-item-badges"><span class="badge badge-veg">Vegetariano</span></div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 5</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- BEVANDE -->
+<section id="bevande">
+  <div class="section-header">
+    <div class="section-num">07</div>
+    <div class="section-title-wrap">
+      <p class="section-eyebrow">Da bere</p>
+      <h2 class="section-title">Bevan<em>de</em></h2>
+    </div>
+  </div>
+  <div class="menu-grid">
+    <div class="menu-item" data-id="vinorosso">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Vino della Casa — Rosso</div>
+        <div class="menu-item-desc">Aglianico del Sannio, Campania IGT. Corposo, tannico, perfetto col ragù.</div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">¼ € 4 · ½ € 7 · 1L € 12</div>
+    </div>
+    <div class="menu-item" data-id="vinobianco">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Vino della Casa — Bianco</div>
+        <div class="menu-item-desc">Falanghina del Sannio DOC. Fresco, floreale, ideale con pesce e pizza.</div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">¼ € 4 · ½ € 7 · 1L € 12</div>
+    </div>
+    <div class="menu-item" data-id="birra">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Birra Artigianale Napoletana</div>
+        <div class="menu-item-desc">Birrificio locale, produzione mensile. Chiedi al cameriere il gusto disponibile oggi.</div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 5</div>
+    </div>
+    <div class="menu-item" data-id="limoncello">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Limoncello di Sorrento</div>
+        <div class="menu-item-desc">Artigianale, limoni di Sorrento IGP, servito ghiacciato</div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 4</div>
+    </div>
+    <div class="menu-item" data-id="caffe">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Caffè Napoletano</div>
+        <div class="menu-item-desc">Miscela Kimbo oro, macinato al momento. Corretto con grappa su richiesta.</div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">€ 1,20</div>
+    </div>
+    <div class="menu-item" data-id="acqua">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Acqua Minerale</div>
+        <div class="menu-item-desc">Naturale o frizzante, bottiglia da 0,5L o 1L</div>
+        <div class="menu-item-click-hint">↗ Vedi foto e allergeni</div>
+      </div>
+      <div class="menu-item-price">0,5L € 1,50 · 1L € 2,50</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p style="font-size:1.8rem; margin-bottom:0.5rem; font-family:'Playfair Display',serif; font-style:italic; letter-spacing:0; text-transform:none; color:var(--cream);">Da Gennaro</p>
+  <p><strong>Via Tribunali 44</strong> · Napoli Centro Storico · 80138</p>
+  <p>Tel. <strong>081 45 67 89</strong> · dagennaro@email.it</p>
+  <p style="margin-top:1rem;">Lun–Sab <strong>12:00–15:00</strong> e <strong>19:00–23:00</strong> · Dom chiuso</p>
+  <p style="margin-top:1.5rem; opacity:0.5; font-size:10px;">I prezzi sono IVA inclusa · Coperto € 2,00 · Allergeni disponibili su richiesta</p>
+</footer>
+
+<script>
+const PIATTI = {
+  // ANTIPASTI
+  bruschette: {
+    cat: "Antipasto", nome: "Bruschette al Pomodoro", prezzo: "€ 6",
+    desc: "Pane casereccio tostato, pomodoro fresco, basilico, aglio e olio EVO di Ravello. Semplicità che non stanca mai.",
+    ingredienti: "Pane di grano duro, pomodoro San Marzano, basilico fresco, aglio, olio EVO Ravello",
+    provenienza: "Pomodoro: Campania · Olio: Costa d'Amalfi",
+    cottura: "Tostatura su griglia a carbone",
+    abbinamento: "Falanghina del Sannio o birra artigianale chiara",
+    calorie: "~220 kcal",
+    tempo: "Pronto in 5 min",
+    presenti: ["Glutine"]
+  },
+  bufala: {
+    cat: "Antipasto", nome: "Mozzarella di Bufala DOP", prezzo: "€ 9",
+    desc: "Bufala campana con pomodorini del piennolo, origano selvatico e filo d'olio. Latte crudo, bontà assoluta.",
+    ingredienti: "Mozzarella di bufala DOP, pomodorini del piennolo, origano selvatico, olio EVO",
+    provenienza: "Bufala: Caserta · Pomodorini: Vesuvio",
+    cottura: "Nessuna — servita a temperatura ambiente",
+    abbinamento: "Falanghina fredda o Greco di Tufo",
+    calorie: "~280 kcal",
+    tempo: "Pronto in 3 min",
+    presenti: ["Latte"]
+  },
+  frittura: {
+    cat: "Antipasto", nome: "Frittura Mista Napoletana", prezzo: "€ 11",
+    desc: "Crocchè di patate, pasta cresciuta, zeppoline di alga, montanarine con pomodoro. La tradizione fritta napoletana in un vassoio.",
+    ingredienti: "Patate, farina 00, lievito di birra, alga wakame, provola, pancetta, pomodoro San Marzano",
+    provenienza: "Farina: Mulino Caputo (Napoli)",
+    cottura: "Frittura in olio di semi di girasole ad alta temperatura (180°C)",
+    abbinamento: "Birra artigianale lager o Aglianico giovane",
+    calorie: "~520 kcal",
+    tempo: "Pronto in 15 min",
+    presenti: ["Glutine", "Uova", "Latte"]
+  },
+  salumi: {
+    cat: "Antipasto", nome: "Salumi e Formaggi del Territorio", prezzo: "€ 14",
+    desc: "Selezione curata quotidianamente dal titolare. Salame napoli, soppressata piccante, caciocavallo stagionato 18 mesi e provola affumicata di Agerola.",
+    ingredienti: "Salame napoli, soppressata calabrese, caciocavallo stagionato DOP, provola affumicata, miele di castagno, noci",
+    provenienza: "Salumi: Calabria e Campania · Formaggi: Agerola e Sila",
+    cottura: "Nessuna — affettato al momento",
+    abbinamento: "Aglianico del Sannio rosso o Primitivo",
+    calorie: "~420 kcal",
+    tempo: "Pronto in 5 min",
+    presenti: ["Latte", "Frutta a guscio"]
+  },
+  alici: {
+    cat: "Antipasto", nome: "Alici di Cetara Marinate", prezzo: "€ 10",
+    desc: "Alici freschissime marinate in olio extravergine e succo di limone, con capperi di Pantelleria sotto sale, peperoncino fresco e prezzemolo.",
+    ingredienti: "Alici fresche di Cetara, olio EVO, limone, capperi di Pantelleria, peperoncino fresco, prezzemolo",
+    provenienza: "Alici: Cetara (SA) · Capperi: Pantelleria",
+    cottura: "Marinatura a freddo, 4 ore minimo",
+    abbinamento: "Falanghina o Vermentino di Sardegna",
+    calorie: "~190 kcal",
+    tempo: "Marinatura 4h · Pronto al momento",
+    presenti: ["Pesce"]
+  },
+  parmigiana: {
+    cat: "Antipasto", nome: "Parmigiana di Melanzane", prezzo: "€ 9",
+    desc: "La classica al forno, stratificata con fior di latte filante, basilico fresco e sugo di pomodoro San Marzano. Ricetta della signora Rosa, nonna di Gennaro.",
+    ingredienti: "Melanzane violette, fior di latte, pomodoro San Marzano DOP, parmigiano reggiano 24 mesi, basilico, uova, olio EVO",
+    provenienza: "Melanzane: Campania · Pomodoro: Agro Sarnese-Nocerino",
+    cottura: "Frittura delle melanzane + cottura in forno a 200°C per 25 min",
+    abbinamento: "Aglianico rosato o birra ambrata",
+    calorie: "~380 kcal",
+    tempo: "Preparazione 2h · Servita tiepida",
+    presenti: ["Latte", "Uova"]
+  },
+
+  // PRIMI
+  ragu: {
+    cat: "Primo Piatto", nome: "Spaghetti al Ragù Napoletano", prezzo: "€ 14",
+    desc: "Il ragù della domenica, cotto sei ore minimo. Carne mista di manzo, maiale e braciole, cipolla ramata di Montoro, vino rosso Aglianico. Il piatto dell'anima napoletana.",
+    ingredienti: "Spaghetti di Gragnano IGP, manzo, maiale, braciole di carne, cipolla ramata, concentrato di pomodoro, San Marzano DOP, Aglianico, alloro, lardo",
+    provenienza: "Pasta: Pastificio dei Campi, Gragnano · Carne: macelleria Di Meo (Napoli)",
+    cottura: "Soffritto lento + cottura a fuoco minimo 6 ore coperto",
+    abbinamento: "Aglianico del Sannio · Taurasi DOCG",
+    calorie: "~680 kcal",
+    tempo: "Cottura ragù: 6h · Pasta: 10 min",
+    presenti: ["Glutine", "Sedano"]
+  },
+  genovese: {
+    cat: "Primo Piatto", nome: "Rigatoni alla Genovese", prezzo: "€ 13",
+    desc: "Piatto napoletano nonostante il nome. Cipolle di Montoro stufate per ore con manzo fino a caramellarsi in una salsa dolce e densa. Parmigiano reggiano a chiudere.",
+    ingredienti: "Rigatoni di Gragnano, cipolle di Montoro, manzo (girello), sedano, carota, vino bianco, parmigiano 24 mesi, olio EVO",
+    provenienza: "Pasta: Gragnano IGP · Cipolle: Valle del Sele",
+    cottura: "Stufatura lenta 4-5 ore a fuoco basso, senza acqua",
+    abbinamento: "Falanghina del Sannio · Fiano d'Avellino DOCG",
+    calorie: "~620 kcal",
+    tempo: "Cottura: 5h · Pasta: 14 min",
+    presenti: ["Glutine", "Latte", "Sedano"]
+  },
+  pastaefagioli: {
+    cat: "Primo Piatto", nome: "Pasta e Fagioli con Cotiche", prezzo: "€ 11",
+    desc: "La zuppa più amata di Napoli. Fagioli borlotti di produzione locale, cotiche di maiale morbidissime, pasta mista spezzata, rosmarino e peperoncino calabrese.",
+    ingredienti: "Pasta mista (spaghetti spezzati, tubetti, ditalini), fagioli borlotti secchi, cotiche di maiale, lardo, rosmarino, peperoncino, pomodoro, aglio",
+    provenienza: "Fagioli: Campania · Pasta: Gragnano",
+    cottura: "Ammollo fagioli 12h + cottura 2h + aggiunta pasta",
+    abbinamento: "Aglianico giovane · Birra artigianale rossa",
+    calorie: "~510 kcal",
+    tempo: "Ammollo 12h · Cottura 2h",
+    presenti: ["Glutine", "Sedano"]
+  },
+  paccheri: {
+    cat: "Primo Piatto", nome: "Paccheri al Pomodoro e Basilico", prezzo: "€ 12",
+    desc: "La semplicità come disciplina. Paccheri di Gragnano IGP — il formato più bello della pasta napoletana — con sugo fresco di San Marzano DOP, basilico e parmigiano.",
+    ingredienti: "Paccheri Gragnano IGP, pomodoro San Marzano DOP, basilico fresco, parmigiano reggiano 24 mesi, olio EVO, aglio",
+    provenienza: "Pasta: Pastificio Gentile, Gragnano · Pomodoro: Agro Sarnese",
+    cottura: "Sugo rapido 20 min · Pasta al dente 14 min",
+    abbinamento: "Falanghina · Lacryma Christi bianco",
+    calorie: "~490 kcal",
+    tempo: "Pronto in 25 min",
+    presenti: ["Glutine", "Latte"]
+  },
+  vongole: {
+    cat: "Primo Piatto", nome: "Linguine alle Vongole Veraci", prezzo: "€ 16",
+    desc: "Vongole veraci pescate nel Golfo di Napoli, sgusciate al momento, con aglio, prezzemolo fresco, vino bianco secco e un tocco di peperoncino. In bianco, come si deve.",
+    ingredienti: "Linguine di Gragnano IGP, vongole veraci (Tapes decussatus), aglio, prezzemolo, vino bianco secco, peperoncino, olio EVO",
+    provenienza: "Vongole: Golfo di Napoli, pescate ogni mattina · Pasta: Gragnano",
+    cottura: "Spurgatura vongole 2h · Cottura in padella 8 min",
+    abbinamento: "Falanghina fresca · Greco di Tufo",
+    calorie: "~520 kcal",
+    tempo: "Spurgatura 2h · Pronto in 20 min",
+    presenti: ["Glutine", "Molluschi", "Solfiti"]
+  },
+  soffritto: {
+    cat: "Primo Piatto", nome: "Zuppa di Soffritto Napoletano", prezzo: "€ 12",
+    desc: "Il piatto dei vicoli. Frattaglie di maiale (cuore, polmone, milza) stufate con concentrato di pomodoro, peperoncino piccante e vino rosso. Cucina povera nobilissima.",
+    ingredienti: "Frattaglie di maiale (cuore, polmone, milza), concentrato di pomodoro, peperoncino secco, vino rosso, alloro, aglio, lardo",
+    provenienza: "Maiale: allevamento Cilento",
+    cottura: "Soffritto e stufatura 90 min a fuoco medio",
+    abbinamento: "Aglianico robusto · Piedirosso",
+    calorie: "~430 kcal",
+    tempo: "Cottura: 90 min",
+    presenti: ["Sedano", "Solfiti"]
+  },
+
+  // SECONDI
+  braciole: {
+    cat: "Secondo Piatto", nome: "Braciole al Ragù", prezzo: "€ 17",
+    desc: "Fettine di manzo arrotolate e farcite con uova sode, prezzemolo, pecorino e pinoli. Legate con spago e cotte per ore nel ragù napoletano. Il secondo che diventa il primo.",
+    ingredienti: "Fettine di manzo, uova sode, prezzemolo, pecorino romano, pinoli, lardo, aglio, ragù napoletano",
+    provenienza: "Manzo: macelleria Di Meo, Napoli",
+    cottura: "Rosolatura in olio + cottura nel ragù 3h",
+    abbinamento: "Taurasi DOCG · Aglianico del Vulture",
+    calorie: "~580 kcal",
+    tempo: "Cottura: 3h nel ragù",
+    presenti: ["Uova", "Latte", "Sedano", "Frutta a guscio"]
+  },
+  polpette: {
+    cat: "Secondo Piatto", nome: "Polpette al Sugo della Nonna", prezzo: "€ 14",
+    desc: "Tre polpette grandi, morbide al centro. Mix di manzo e maiale macinati, mollica di pane bagnata nel latte, pecorino, uovo fresco e noce moscata. Poi nel sugo.",
+    ingredienti: "Manzo macinato, maiale macinato, mollica di pane raffermo, latte, pecorino, uova, noce moscata, parmigiano, pomodoro San Marzano",
+    provenienza: "Carne: macelleria Di Meo · Latte: cooperativa Agro Sarnese",
+    cottura: "Frittura rapida + cottura in sugo 45 min",
+    abbinamento: "Aglianico rosso · Piedirosso",
+    calorie: "~520 kcal",
+    tempo: "Cottura: 1h",
+    presenti: ["Glutine", "Uova", "Latte"]
+  },
+  baccala: {
+    cat: "Secondo Piatto", nome: "Baccalà alla Napoletana", prezzo: "€ 16",
+    desc: "Baccalà dissalato per 48 ore e poi cotto in tegame con pomodoro, olive nere di Gaeta, capperi sotto sale, pinoli tostati e alloro. Profumo di mare e tradizione.",
+    ingredienti: "Baccalà dissalato, pomodoro San Marzano, olive nere di Gaeta, capperi di Pantelleria, pinoli, alloro, olio EVO",
+    provenienza: "Baccalà: Norvegia (merluzzo artico) · Olive: Gaeta (LT)",
+    cottura: "Dissalatura 48h + cottura in tegame 30 min",
+    abbinamento: "Greco di Tufo · Falanghina",
+    calorie: "~390 kcal",
+    tempo: "Dissalatura 48h · Cottura 30 min",
+    presenti: ["Pesce", "Frutta a guscio"]
+  },
+  pollo: {
+    cat: "Secondo Piatto", nome: "Pollo alla Cacciatora", prezzo: "€ 15",
+    desc: "Pollo ruspante allevato a terra, tagliato al coltello, rosolato e poi stufato con pomodoro, olive, capperi, rosmarino e vino bianco secco. Rustico e soddisfacente.",
+    ingredienti: "Pollo ruspante (allevato a terra), pomodoro, olive taggiasche, capperi, rosmarino, vino bianco secco, sedano, carota, cipolla",
+    provenienza: "Pollo: azienda agricola Cilento",
+    cottura: "Rosolatura + stufatura coperta 50 min",
+    abbinamento: "Falanghina · Lacryma Christi bianco",
+    calorie: "~460 kcal",
+    tempo: "Cottura: 1h",
+    presenti: ["Solfiti", "Sedano"]
+  },
+  salsiccia: {
+    cat: "Secondo Piatto", nome: "Salsiccia e Friarielli", prezzo: "€ 14",
+    desc: "Salsiccia di suino puro, aromatizzata a finocchietto selvatico, cotta alla brace. Accanto, friarielli napoletani (cime di rapa) saltati in padella con aglio e peperoncino.",
+    ingredienti: "Salsiccia di suino (finocchietto selvatico), friarielli (cime di rapa), aglio, olio EVO, peperoncino",
+    provenienza: "Salsiccia: norcino Esposito, mercato di Porta Nolana · Friarielli: Campania",
+    cottura: "Salsiccia alla brace · Friarielli saltati in padella di ferro",
+    abbinamento: "Aglianico · Piedirosso",
+    calorie: "~540 kcal",
+    tempo: "Pronto in 20 min",
+    presenti: []
+  },
+  paranza: {
+    cat: "Secondo Piatto", nome: "Fritto di Paranza", prezzo: "€ 18",
+    desc: "Pesce azzurro fresco del giorno — alici, triglie, merluzzetti, calamari — infarinati leggermente e fritti in olio abbondante. Croccante fuori, morbido dentro.",
+    ingredienti: "Pesce azzurro del giorno (alici, triglie, merluzzetti, calamari), farina di grano tenero 00, olio di semi di girasole, sale, limone",
+    provenienza: "Pesce: mercato ittico di Pozzuoli, ogni mattina",
+    cottura: "Frittura in olio di semi a 180°C",
+    abbinamento: "Falanghina · Greco di Tufo · Birra lager",
+    calorie: "~490 kcal",
+    tempo: "Pronto in 15 min",
+    presenti: ["Pesce", "Glutine"]
+  },
+
+  // PIZZE
+  margherita: {
+    cat: "Pizza", nome: "Margherita", prezzo: "€ 9",
+    desc: "L'originale, l'immortale. Creata nel 1889 per la Regina Margherita di Savoia. Tre ingredienti, un equilibrio perfetto.",
+    ingredienti: "Impasto 48h (farina tipo 1 Caputo, acqua, lievito madre, sale), pomodoro San Marzano DOP, fior di latte di Agerola, basilico fresco, olio EVO",
+    provenienza: "Farina: Mulino Caputo · Fior di latte: Agerola (NA)",
+    cottura: "Forno a legna di tufo a 485°C · 60-90 secondi",
+    abbinamento: "Falanghina · Birra chiara napoletana",
+    calorie: "~750 kcal",
+    tempo: "Lievitazione 48h · Cottura 90 sec",
+    presenti: ["Glutine", "Latte"]
+  },
+  marinara: {
+    cat: "Pizza", nome: "Marinara", prezzo: "€ 7",
+    desc: "La più antica. Nata per i marinai che tornavano al porto. Zero latticini, zero compromessi. Aglio, olio, origano e San Marzano.",
+    ingredienti: "Impasto 48h, pomodoro San Marzano DOP, aglio fresco, origano selvatico, olio EVO",
+    provenienza: "Origano: Appennino campano · San Marzano: Agro Sarnese",
+    cottura: "Forno a legna di tufo a 485°C · 60-90 secondi",
+    abbinamento: "Aglianico · Birra artigianale",
+    calorie: "~620 kcal",
+    tempo: "Lievitazione 48h · Cottura 90 sec",
+    presenti: ["Glutine"]
+  },
+  diavola: {
+    cat: "Pizza", nome: "Diavola", prezzo: "€ 11",
+    desc: "Per chi ama il fuoco. Salame piccante calabrese 'nduja-style e peperoncino fresco di Pontecorvo. Il calore si fa sentire.",
+    ingredienti: "Impasto 48h, San Marzano DOP, fior di latte, salame piccante calabrese, peperoncino fresco, olio EVO",
+    provenienza: "Salame: salumificio Mammoliti, Calabria",
+    cottura: "Forno a legna di tufo a 485°C · 90 secondi",
+    abbinamento: "Aglianico robusto · Birra ambrata",
+    calorie: "~820 kcal",
+    tempo: "Lievitazione 48h · Cottura 90 sec",
+    presenti: ["Glutine", "Latte"]
+  },
+  quattrostagioni: {
+    cat: "Pizza", nome: "Quattro Stagioni", prezzo: "€ 13",
+    desc: "Quattro quadranti, quattro ingredienti, quattro stagioni. Prosciutto cotto, funghi porcini trifolati, carciofi sott'olio e olive nere di Gaeta.",
+    ingredienti: "Impasto 48h, San Marzano DOP, fior di latte, prosciutto cotto di qualità, funghi porcini trifolati, carciofi sott'olio, olive nere di Gaeta",
+    provenienza: "Prosciutto: salumificio campano · Funghi: Appennino",
+    cottura: "Forno a legna di tufo a 485°C · 90 secondi",
+    abbinamento: "Falanghina · Rosato campano",
+    calorie: "~870 kcal",
+    tempo: "Lievitazione 48h · Cottura 90 sec",
+    presenti: ["Glutine", "Latte"]
+  },
+  montanara: {
+    cat: "Pizza", nome: "Montanara Fritta", prezzo: "€ 12",
+    desc: "La pizza della nonna. Prima fritta in olio abbondante, poi passata velocemente nel forno a legna. Leggera e croccante al contempo — non è una contraddizione, è una magia.",
+    ingredienti: "Impasto 48h, olio di semi (frittura), San Marzano DOP, fior di latte, ricotta fresca, basilico",
+    provenienza: "Ricotta: Caseificio Stabiese · Farina: Caputo",
+    cottura: "Frittura a 180°C + 30 secondi in forno a legna",
+    abbinamento: "Falanghina · Birra lager fresca",
+    calorie: "~910 kcal",
+    tempo: "Lievitazione 48h · Frittura + forno 5 min",
+    presenti: ["Glutine", "Latte", "Uova"]
+  },
+  cosacca: {
+    cat: "Pizza", nome: "Cosacca", prezzo: "€ 9",
+    desc: "La pizza che precedette la Margherita. Niente mozzarella, solo pecorino romano grattugiato e pomodoro. Servita nel 1847 al Re Ferdinando II. Storia in ogni morso.",
+    ingredienti: "Impasto 48h, San Marzano DOP, pecorino romano DOP grattugiato, basilico fresco, olio EVO",
+    provenienza: "Pecorino: Lazio DOP · San Marzano: Campania DOP",
+    cottura: "Forno a legna di tufo a 485°C · 60 secondi",
+    abbinamento: "Aglianico · Birra artigianale scura",
+    calorie: "~690 kcal",
+    tempo: "Lievitazione 48h · Cottura 60 sec",
+    presenti: ["Glutine", "Latte"]
+  },
+  salsicciapizza: {
+    cat: "Pizza", nome: "Salsiccia e Friarielli", prezzo: "€ 13",
+    desc: "Il matrimonio napoletano per eccellenza. Salsiccia di maiale al finocchietto e friarielli saltati con aglio. Scaglie di parmigiano a finire. Il profumo è già metà del piacere.",
+    ingredienti: "Impasto 48h, fior di latte, salsiccia di suino al finocchietto, friarielli saltati, aglio, parmigiano reggiano a scaglie",
+    provenienza: "Salsiccia: norcino Esposito · Friarielli: Campania stagionale",
+    cottura: "Forno a legna di tufo a 485°C · 90 secondi",
+    abbinamento: "Aglianico · Piedirosso",
+    calorie: "~890 kcal",
+    tempo: "Lievitazione 48h · Cottura 90 sec",
+    presenti: ["Glutine", "Latte"]
+  },
+  bufalaecrudo: {
+    cat: "Pizza", nome: "Bufala e Crudo", prezzo: "€ 15",
+    desc: "La pizza che va fuori dal forno e si veste a crudo. Bufala DOP aggiunta dopo la cottura, prosciutto crudo di Parma 24 mesi, rucola selvatica e grana a scaglie.",
+    ingredienti: "Impasto 48h, San Marzano DOP, mozzarella di bufala DOP, prosciutto crudo di Parma 24 mesi, rucola, grana padano a scaglie, olio EVO",
+    provenienza: "Bufala: Caserta DOP · Prosciutto: Parma DOP",
+    cottura: "Forno a 485°C · Guarnizione a crudo dopo cottura",
+    abbinamento: "Falanghina fresca · Prosecco extra brut",
+    calorie: "~920 kcal",
+    tempo: "Lievitazione 48h · Cottura 90 sec",
+    presenti: ["Glutine", "Latte"]
+  },
+  ripieno: {
+    cat: "Pizza", nome: "Ripieno al Forno", prezzo: "€ 14",
+    desc: "La pizza che si nasconde. Doppio strato di impasto, ripiena di ricotta fresca, salame napoletano, cicoli di maiale e pepe nero. Aperta al tavolo davanti a voi.",
+    ingredienti: "Impasto 48h (doppio), ricotta fresca, salame napoletano, cicoli di maiale, pepe nero, pecorino",
+    provenienza: "Ricotta: Caseificio Stabiese · Salame: Napoli",
+    cottura: "Forno a legna di tufo a 485°C · 3-4 minuti (più spessa)",
+    abbinamento: "Aglianico · Birra artigianale doppio malto",
+    calorie: "~980 kcal",
+    tempo: "Lievitazione 48h · Cottura 4 min",
+    presenti: ["Glutine", "Latte"]
+  },
+
+  // CONTORNI
+  patate: {
+    cat: "Contorno", nome: "Patate al Forno con Rosmarino", prezzo: "€ 5",
+    desc: "Patate novelle a pasta gialla tagliate a spicchi, condite con rosmarino fresco, aglio in camicia e olio EVO. Croccanti fuori, morbide dentro.",
+    ingredienti: "Patate novelle, rosmarino fresco, aglio, olio EVO, sale grosso",
+    provenienza: "Patate: Campania",
+    cottura: "Forno ventilato a 200°C per 35 min",
+    abbinamento: "Con qualsiasi secondo",
+    calorie: "~180 kcal",
+    tempo: "Cottura 35 min",
+    presenti: []
+  },
+  friariellicont: {
+    cat: "Contorno", nome: "Friarielli Saltati", prezzo: "€ 5",
+    desc: "Cime di rapa napoletane — che al nord chiamano impropriamente 'broccoletti' — spadellate con aglio, olio EVO e peperoncino. Leggermente amari, irresistibili.",
+    ingredienti: "Friarielli (cime di rapa), aglio, olio EVO, peperoncino fresco",
+    provenienza: "Friarielli: Campania, stagionalità autunno-inverno",
+    cottura: "Sbollentatura breve + salto in padella di ferro 10 min",
+    abbinamento: "Con salsiccia o second di maiale",
+    calorie: "~90 kcal",
+    tempo: "Pronto in 15 min",
+    presenti: []
+  },
+  insalata: {
+    cat: "Contorno", nome: "Insalata Mista", prezzo: "€ 5",
+    desc: "Verdure di stagione scelte ogni mattina al mercato. Pomodorini del piennolo, cipolla di Tropea cruda, olive nere di Gaeta e origano selvatico. Condita al momento.",
+    ingredienti: "Verdure di stagione, pomodorini del piennolo, cipolla di Tropea, olive nere di Gaeta, origano, olio EVO, aceto di vino",
+    provenienza: "Verdure: mercato di Porta Nolana",
+    cottura: "Nessuna",
+    abbinamento: "Con qualsiasi piatto",
+    calorie: "~110 kcal",
+    tempo: "Pronto in 5 min",
+    presenti: []
+  },
+  melanzane: {
+    cat: "Contorno", nome: "Melanzane a Funghetto", prezzo: "€ 5",
+    desc: "Melanzane violette a cubetti, fritte e poi ripassate in padella con pomodoro fresco, basilico e aglio. Il nome viene dalla forma a funghetto che prendono in cottura.",
+    ingredienti: "Melanzane violette napoletane, pomodoro fresco, basilico, aglio, olio EVO",
+    provenienza: "Melanzane: Campania",
+    cottura: "Frittura + spadellata 15 min",
+    abbinamento: "Con carne o pesce alla griglia",
+    calorie: "~160 kcal",
+    tempo: "Pronto in 25 min",
+    presenti: []
+  },
+
+  // DOLCI
+  baba: {
+    cat: "Dolce", nome: "Babà al Rum Napoletano", prezzo: "€ 6",
+    desc: "Il re incontrastato della pasticceria napoletana. Pasta brioche soffice come una spugna, imbevuta di bagna al rum invecchiato giamaicano. Chantilly a richiesta.",
+    ingredienti: "Farina 00, uova, burro, lievito di birra, zucchero, rum giamaicano invecchiato, sciroppo di zucchero, panna fresca",
+    provenienza: "Rum: Giamaica 7 anni · Farina: Caputo",
+    cottura: "Cottura in forno 180°C + bagna calda",
+    abbinamento: "Caffè napoletano · Limoncello",
+    calorie: "~380 kcal",
+    tempo: "Lievitazione 3h · Bagna sul momento",
+    presenti: ["Glutine", "Uova", "Latte"]
+  },
+  sfogliatella: {
+    cat: "Dolce", nome: "Sfogliatella Riccia", prezzo: "€ 5",
+    desc: "Uno dei simboli di Napoli. Pasta sfogliata croccantissima, ripiena di ricotta, semolino, canditi di cedro e arancio, cannella e vaniglia. Servita tiepida, sempre.",
+    ingredienti: "Farina 00, strutto, semolino, ricotta fresca, zucchero, cedro e arancio canditi, cannella, vaniglia, uova",
+    provenienza: "Ricotta: Caseificio Stabiese · Canditi: lavorazione artigianale",
+    cottura: "Forno a 220°C per 20-25 min",
+    abbinamento: "Caffè napoletano",
+    calorie: "~290 kcal",
+    tempo: "Servita tiepida",
+    presenti: ["Glutine", "Uova", "Latte"]
+  },
+  pastiera: {
+    cat: "Dolce", nome: "Pastiera Napoletana", prezzo: "€ 6",
+    desc: "Il dolce di Pasqua che da noi si mangia tutto l'anno. Frolla ricca, ripieno di grano cotto nel latte, ricotta, uova, canditi, fior d'arancio e cannella. Profumo antico.",
+    ingredienti: "Farina, burro, uova, zucchero, grano cotto, ricotta, cedro e arancio canditi, essenza di fior d'arancio, cannella, vaniglia",
+    provenienza: "Grano: varietà antica campana",
+    cottura: "Forno a 180°C per 45 min · Riposo 24h",
+    abbinamento: "Greco di Tufo passito · Limoncello",
+    calorie: "~360 kcal",
+    tempo: "Riposo 24h · Servita a temperatura ambiente",
+    presenti: ["Glutine", "Uova", "Latte"]
+  },
+  delizia: {
+    cat: "Dolce", nome: "Delizia al Limone", prezzo: "€ 6",
+    desc: "Il dolce della costiera. Pan di Spagna morbido imbevuto di sciroppo al limone, crema pasticcera al limone di Sorrento e glassa vellutata. Fresco, profumato, elegante.",
+    ingredienti: "Uova, farina, zucchero, limoni di Sorrento IGP, panna fresca, latte, amido di mais",
+    provenienza: "Limoni: Sorrento IGP",
+    cottura: "Pan di Spagna in forno · Crema sul fuoco",
+    abbinamento: "Limoncello · Moscato d'Asti",
+    calorie: "~310 kcal",
+    tempo: "Assemblata fresca ogni giorno",
+    presenti: ["Glutine", "Uova", "Latte"]
+  },
+  tiramisu: {
+    cat: "Dolce", nome: "Tiramisù della Casa", prezzo: "€ 6",
+    desc: "La versione di Gennaro: savoiardi inzuppati nel caffè napoletano ristretto (non americano), crema di mascarpone e tuorli d'uovo, cacao amaro olandese in abbondanza. Niente panna montata, mai.",
+    ingredienti: "Savoiardi, mascarpone, tuorli d'uovo pastorizzati, zucchero, caffè napoletano ristretto, cacao amaro in polvere",
+    provenienza: "Caffè: miscela Kimbo oro · Mascarpone: Lombardo",
+    cottura: "Nessuna cottura · Riposo in frigo 6h",
+    abbinamento: "Caffè · Marsala secco",
+    calorie: "~420 kcal",
+    tempo: "Riposo 6h in frigo",
+    presenti: ["Glutine", "Uova", "Latte"]
+  },
+  gelato: {
+    cat: "Dolce", nome: "Gelato Artigianale (2 gusti)", prezzo: "€ 5",
+    desc: "Produzione propria con gelatiera artigianale. Gusti: pistacchio di Bronte DOP, nocciola tonda gentile delle Langhe, stracciatella, limone di Sorrento, cioccolato fondente 70%.",
+    ingredienti: "Latte fresco, panna, zucchero di canna, tuorli, pistacchio di Bronte DOP / nocciola / limone / cioccolato fondente 70%",
+    provenienza: "Pistacchio: Bronte (CT) DOP · Nocciola: Langhe",
+    cottura: "Mantecatura artigianale ogni mattina",
+    abbinamento: "Caffè napoletano · Da solo",
+    calorie: "~260 kcal (2 palline)",
+    tempo: "Produzione giornaliera",
+    presenti: ["Latte", "Uova", "Frutta a guscio"]
+  },
+
+  // BEVANDE
+  vinorosso: {
+    cat: "Bevanda", nome: "Vino della Casa — Rosso", prezzo: "¼ € 4 · ½ € 7 · 1L € 12",
+    desc: "Aglianico del Sannio, Campania IGT. Vino da tavola di carattere, corposo e tannico. Produttore locale, annata selezionata da Gennaro ogni settembre.",
+    ingredienti: "Uve Aglianico 100%",
+    provenienza: "Cantina Mustilli, Sant'Agata dei Goti (BN)",
+    cottura: "—",
+    abbinamento: "Ragù, braciole, secondi di carne",
+    calorie: "~85 kcal / 100ml",
+    tempo: "Servito a 16-18°C",
+    presenti: ["Solfiti"]
+  },
+  vinobianco: {
+    cat: "Bevanda", nome: "Vino della Casa — Bianco", prezzo: "¼ € 4 · ½ € 7 · 1L € 12",
+    desc: "Falanghina del Sannio DOC. Fresco, floreale, con note di agrumi e pesca bianca. Perfetto con pesce, pizza marinara e antipasti leggeri.",
+    ingredienti: "Uve Falanghina 100%",
+    provenienza: "Cantina Mustilli, Sant'Agata dei Goti (BN)",
+    cottura: "—",
+    abbinamento: "Pesce, pizza, antipasti leggeri",
+    calorie: "~75 kcal / 100ml",
+    tempo: "Servito a 8-10°C",
+    presenti: ["Solfiti"]
+  },
+  birra: {
+    cat: "Bevanda", nome: "Birra Artigianale Napoletana", prezzo: "€ 5",
+    desc: "Dal birrificio Karma di Napoli, produzione mensile in piccoli lotti. Stile variabile (chiara, ambrata, weizen). Il cameriere vi dirà qual è disponibile oggi.",
+    ingredienti: "Malto d'orzo, luppolo, lievito, acqua",
+    provenienza: "Birrificio Karma, Napoli",
+    cottura: "—",
+    abbinamento: "Frittura, pizza, salumi",
+    calorie: "~150-180 kcal / 33cl",
+    tempo: "Servita a 4-6°C",
+    presenti: ["Glutine"]
+  },
+  limoncello: {
+    cat: "Bevanda", nome: "Limoncello di Sorrento", prezzo: "€ 4",
+    desc: "Produzione artigianale del titolare. Limoni IGP di Sorrento a buccia spessa, infusi in alcol puro per 30 giorni, poi allungati con sciroppo. Servito in bicchierino ghiacciato.",
+    ingredienti: "Limoni di Sorrento IGP, alcol etilico, acqua, zucchero",
+    provenienza: "Limoni: Penisola Sorrentina IGP",
+    cottura: "—",
+    abbinamento: "Dopo cena, con dolci, con caffè",
+    calorie: "~110 kcal",
+    tempo: "Servito ghiacciato a -5°C",
+    presenti: []
+  },
+  caffe: {
+    cat: "Bevanda", nome: "Caffè Napoletano", prezzo: "€ 1,20",
+    desc: "Il rito. Miscela Kimbo oro, macinato al momento e preparato con la macchina espresso calibrata a regola d'arte. Denso, cremoso, leggermente amarognolo. Il caffè sospeso è un'istituzione.",
+    ingredienti: "Miscela Kimbo oro (arabica + robusta)",
+    provenienza: "Kimbo, Napoli",
+    cottura: "Espresso a 9 bar, 90°C, 25 secondi",
+    abbinamento: "Babà, sfogliatella, tiramisù",
+    calorie: "~5 kcal (senza zucchero)",
+    tempo: "Pronto in 30 secondi",
+    presenti: []
+  },
+  acqua: {
+    cat: "Bevanda", nome: "Acqua Minerale", prezzo: "0,5L € 1,50 · 1L € 2,50",
+    desc: "Acqua Lete (naturale) o Ferrarelle (effervescente naturale) — entrambe sorgenti campane. La Ferrarelle è la preferita di Gennaro.",
+    ingredienti: "Acqua minerale naturale / effervescente naturale",
+    provenienza: "Sorgente Lete o Ferrarelle (Campania)",
+    cottura: "—",
+    abbinamento: "Con qualsiasi piatto",
+    calorie: "0 kcal",
+    tempo: "Sempre disponibile",
+    presenti: []
+  }
+};
+
+const TUTTI_ALLERGENI = [
+  "Glutine","Crostacei","Uova","Pesce","Arachidi",
+  "Soia","Latte","Frutta a guscio","Sedano","Senape",
+  "Sesamo","Molluschi","Lupini","Solfiti"
+];
+
+const overlay = document.getElementById('modalOverlay');
+const modalClose = document.getElementById('modalClose');
+
+function openModal(id) {
+  const p = PIATTI[id];
+  if (!p) return;
+
+  document.getElementById('modalCategory').textContent = p.cat;
+  document.getElementById('modalTitle').textContent = p.nome;
+  document.getElementById('modalDesc').textContent = p.desc;
+  document.getElementById('modalPrice').textContent = p.prezzo;
+
+  // Info grid
+  const infoGrid = document.getElementById('modalInfoGrid');
+  infoGrid.innerHTML = `
+    <div class="modal-info-cell full">
+      <div class="modal-info-label">Ingredienti principali</div>
+      <div class="modal-info-value">${p.ingredienti}</div>
+    </div>
+    <div class="modal-info-cell">
+      <div class="modal-info-label">Provenienza</div>
+      <div class="modal-info-value">${p.provenienza}</div>
+    </div>
+    <div class="modal-info-cell">
+      <div class="modal-info-label">Metodo di cottura</div>
+      <div class="modal-info-value">${p.cottura}</div>
+    </div>
+    <div class="modal-info-cell">
+      <div class="modal-info-label">Abbinamento consigliato</div>
+      <div class="modal-info-value">${p.abbinamento}</div>
+    </div>
+    <div class="modal-info-cell">
+      <div class="modal-info-label">Calorie indicative</div>
+      <div class="modal-info-value">${p.calorie}</div>
+    </div>
+  `;
+
+  // Allergeni
+  const grid = document.getElementById('allergeniGrid');
+  grid.innerHTML = TUTTI_ALLERGENI.map(a => {
+    const presente = p.presenti.includes(a);
+    return `<div class="allergene-tag ${presente ? 'present' : 'absent'}">
+      <div class="allergene-dot"></div>
+      ${a}
+    </div>`;
+  }).join('');
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+modalClose.addEventListener('click', closeModal);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+document.querySelectorAll('[data-id]').forEach(el => {
+  el.addEventListener('click', () => openModal(el.dataset.id));
+});
+</script>
+  // ANTIPASTI
+  bruschette: {
+    cat: "Antipasto", nome: "Bruschette al Pomodoro", prezzo: "€ 6",
+    desc: "Pane casereccio tostato, pomodoro fresco, basilico, aglio e olio EVO di Ravello. Semplicità che non stanca mai.",
+    img: "https://images.unsplash.com/photo-1572695157366-5e585ab2b69f?w=800&q=80",
+    emoji: "🍅",
+    presenti: ["Glutine"]
+  },
+  bufala: {
+    cat: "Antipasto", nome: "Mozzarella di Bufala DOP", prezzo: "€ 9",
+    desc: "Bufala campana con pomodorini del piennolo, origano selvatico e filo d'olio. Latte crudo, bontà assoluta.",
+    img: "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?w=800&q=80",
+    emoji: "🧀",
+    presenti: ["Latte"]
+  },
+  frittura: {
+    cat: "Antipasto", nome: "Frittura Mista Napoletana", prezzo: "€ 11",
+    desc: "Crocchè di patate, pasta cresciuta, zeppoline di alga, montanarine con pomodoro. La tradizione fritta.",
+    img: "https://images.unsplash.com/photo-1573225342350-16731dd9bf83?w=800&q=80",
+    emoji: "🍟",
+    presenti: ["Glutine", "Uova", "Latte"]
+  },
+  salumi: {
+    cat: "Antipasto", nome: "Salumi e Formaggi del Territorio", prezzo: "€ 14",
+    desc: "Selezione di salame napoli, soppressata, caciocavallo stagionato e provola affumicata.",
+    img: "https://images.unsplash.com/photo-1544025162-d76594e558c9?w=800&q=80",
+    emoji: "🥩",
+    presenti: ["Latte"]
+  },
+  alici: {
+    cat: "Antipasto", nome: "Alici di Cetara Marinate", prezzo: "€ 10",
+    desc: "Alici fresche in olio e limone, capperi di Pantelleria, peperoncino e prezzemolo. Il mare nel piatto.",
+    img: "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&q=80",
+    emoji: "🐟",
+    presenti: ["Pesce"]
+  },
+  parmigiana: {
+    cat: "Antipasto", nome: "Parmigiana di Melanzane", prezzo: "€ 9",
+    desc: "La classica al forno, con fior di latte, basilico e sugo di pomodoro San Marzano.",
+    img: "https://images.unsplash.com/photo-1625937286074-9b4e6a95d8e0?w=800&q=80",
+    emoji: "🍆",
+    presenti: ["Latte", "Uova"]
+  },
+
+  // PRIMI
+  ragu: {
+    cat: "Primo Piatto", nome: "Spaghetti al Ragù Napoletano", prezzo: "€ 14",
+    desc: "Ragù della nonna, cotto sei ore con carne mista, cipolle dorate e vino rosso. Il piatto dell'anima.",
+    img: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?w=800&q=80",
+    emoji: "🍝",
+    presenti: ["Glutine", "Sedano"]
+  },
+  genovese: {
+    cat: "Primo Piatto", nome: "Rigatoni alla Genovese", prezzo: "€ 13",
+    desc: "Cipolle di Montoro stufate lentamente con manzo, profumo di alloro e parmigiano grattugiato.",
+    img: "https://images.unsplash.com/photo-1548943487-a2e4e43b4853?w=800&q=80",
+    emoji: "🍝",
+    presenti: ["Glutine", "Latte"]
+  },
+  pastaefagioli: {
+    cat: "Primo Piatto", nome: "Pasta e Fagioli con Cotiche", prezzo: "€ 11",
+    desc: "Fagioli borlotti, cotiche di maiale, pasta mista, rosmarino e peperoncino. Vera cucina povera.",
+    img: "https://images.unsplash.com/photo-1547592180-85f173990554?w=800&q=80",
+    emoji: "🫘",
+    presenti: ["Glutine", "Sedano"]
+  },
+  paccheri: {
+    cat: "Primo Piatto", nome: "Paccheri al Pomodoro e Basilico", prezzo: "€ 12",
+    desc: "Paccheri di Gragnano IGP, pomodori San Marzano DOP, basilico fresco e parmigiano.",
+    img: "https://images.unsplash.com/photo-1473093226555-0af114e1b0bd?w=800&q=80",
+    emoji: "🍅",
+    presenti: ["Glutine", "Latte"]
+  },
+  vongole: {
+    cat: "Primo Piatto", nome: "Linguine alle Vongole Veraci", prezzo: "€ 16",
+    desc: "Vongole di mare aperto, aglio, prezzemolo, vino bianco e un tocco di peperoncino fresco.",
+    img: "https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=800&q=80",
+    emoji: "🦪",
+    presenti: ["Glutine", "Molluschi", "Solfiti"]
+  },
+  soffritto: {
+    cat: "Primo Piatto", nome: "Zuppa di Soffritto Napoletano", prezzo: "€ 12",
+    desc: "Frattaglie di maiale, concentrato di pomodoro, peperoncino, vino rosso. Non per i deboli di cuore.",
+    img: "https://images.unsplash.com/photo-1574653853028-ec0dce24eb0c?w=800&q=80",
+    emoji: "🍲",
+    presenti: ["Sedano", "Solfiti"]
+  },
+
+  // SECONDI
+  braciole: {
+    cat: "Secondo Piatto", nome: "Braciole al Ragù", prezzo: "€ 17",
+    desc: "Involtini di manzo ripieni di uova sode, prezzemolo e formaggio, cotti nel sugo per ore.",
+    img: "https://images.unsplash.com/photo-1544025162-d76594e558c9?w=800&q=80",
+    emoji: "🥩",
+    presenti: ["Uova", "Latte", "Sedano"]
+  },
+  polpette: {
+    cat: "Secondo Piatto", nome: "Polpette al Sugo della Nonna", prezzo: "€ 14",
+    desc: "Manzo e maiale, mollica di pane, pecorino, uovo e noce moscata. Tre per porzione.",
+    img: "https://images.unsplash.com/photo-1529042410759-befb1204b468?w=800&q=80",
+    emoji: "🍖",
+    presenti: ["Glutine", "Uova", "Latte"]
+  },
+  baccala: {
+    cat: "Secondo Piatto", nome: "Baccalà alla Napoletana", prezzo: "€ 16",
+    desc: "Baccalà dissalato, pomodoro, olive nere di Gaeta, capperi e pinoli, profumo di alloro.",
+    img: "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&q=80",
+    emoji: "🐠",
+    presenti: ["Pesce", "Frutta a guscio"]
+  },
+  pollo: {
+    cat: "Secondo Piatto", nome: "Pollo alla Cacciatora", prezzo: "€ 15",
+    desc: "Pollo ruspante, pomodoro, olive, capperi, rosmarino e vino bianco secco.",
+    img: "https://images.unsplash.com/photo-1598103442097-8b74394b95c8?w=800&q=80",
+    emoji: "🍗",
+    presenti: ["Solfiti", "Sedano"]
+  },
+  salsiccia: {
+    cat: "Secondo Piatto", nome: "Salsiccia e Friarielli", prezzo: "€ 14",
+    desc: "Salsiccia di suino alla brace con friarielli saltati in padella, aglio e peperoncino.",
+    img: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=800&q=80",
+    emoji: "🌿",
+    presenti: []
+  },
+  paranza: {
+    cat: "Secondo Piatto", nome: "Fritto di Paranza", prezzo: "€ 18",
+    desc: "Pesce azzurro fresco del giorno, infarinato e fritto in olio di semi ad alta temperatura.",
+    img: "https://images.unsplash.com/photo-1559737558-2f5a35f4523b?w=800&q=80",
+    emoji: "🐟",
+    presenti: ["Pesce", "Glutine"]
+  },
+
+  // PIZZE
+  margherita: {
+    cat: "Pizza", nome: "Margherita", prezzo: "€ 9",
+    desc: "San Marzano DOP, fior di latte di Agerola, basilico fresco, olio EVO. L'originale, l'immortale.",
+    img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&q=80",
+    emoji: "🍕",
+    presenti: ["Glutine", "Latte"]
+  },
+  marinara: {
+    cat: "Pizza", nome: "Marinara", prezzo: "€ 7",
+    desc: "San Marzano DOP, aglio, origano selvatico, olio EVO. La più antica, quella dei marinai.",
+    img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80",
+    emoji: "🍕",
+    presenti: ["Glutine"]
+  },
+  diavola: {
+    cat: "Pizza", nome: "Diavola", prezzo: "€ 11",
+    desc: "San Marzano, fior di latte, salame piccante calabrese, peperoncino fresco. Per chi ama il fuoco.",
+    img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=800&q=80",
+    emoji: "🌶️",
+    presenti: ["Glutine", "Latte"]
+  },
+  quattrostagioni: {
+    cat: "Pizza", nome: "Quattro Stagioni", prezzo: "€ 13",
+    desc: "Pomodoro, fior di latte, prosciutto cotto, funghi porcini, carciofi, olive nere. Un anno in un morso.",
+    img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=80",
+    emoji: "🍕",
+    presenti: ["Glutine", "Latte"]
+  },
+  montanara: {
+    cat: "Pizza", nome: "Montanara Fritta", prezzo: "€ 12",
+    desc: "Fritta e poi infornata: pomodoro, fior di latte, ricotta, basilico. Specialità della casa, doppia cottura.",
+    img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&q=80",
+    emoji: "🍕",
+    presenti: ["Glutine", "Latte", "Uova"]
+  },
+  cosacca: {
+    cat: "Pizza", nome: "Cosacca", prezzo: "€ 9",
+    desc: "San Marzano DOP, pecorino romano grattugiato, basilico, olio EVO. Niente mozzarella — la pizza storica.",
+    img: "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=800&q=80",
+    emoji: "🍕",
+    presenti: ["Glutine", "Latte"]
+  },
+  salsicciapizza: {
+    cat: "Pizza", nome: "Salsiccia e Friarielli", prezzo: "€ 13",
+    desc: "Fior di latte, salsiccia di maiale, friarielli saltati, scaglie di parmigiano. Il classico napoletano.",
+    img: "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=800&q=80",
+    emoji: "🍕",
+    presenti: ["Glutine", "Latte"]
+  },
+  bufalaecrudo: {
+    cat: "Pizza", nome: "Bufala e Crudo", prezzo: "€ 15",
+    desc: "Pomodoro, bufala DOP, prosciutto crudo di Parma 24 mesi, rucola, grana a scaglie.",
+    img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800&q=80",
+    emoji: "🍕",
+    presenti: ["Glutine", "Latte"]
+  },
+  ripieno: {
+    cat: "Pizza", nome: "Ripieno al Forno", prezzo: "€ 14",
+    desc: "Ricotta, salame, cicoli, pepe nero. Chiusa e cotta al forno, aperta al tavolo con un colpo teatrale.",
+    img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800&q=80",
+    emoji: "🍕",
+    presenti: ["Glutine", "Latte"]
+  },
+
+  // CONTORNI
+  patate: {
+    cat: "Contorno", nome: "Patate al Forno con Rosmarino", prezzo: "€ 5",
+    desc: "Patate novelle con rosmarino, aglio e olio EVO.",
+    img: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=800&q=80",
+    emoji: "🥔",
+    presenti: []
+  },
+  friariellicont: {
+    cat: "Contorno", nome: "Friarielli Saltati", prezzo: "€ 5",
+    desc: "Cime di rapa napoletane, aglio, olio e peperoncino.",
+    img: "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&q=80",
+    emoji: "🌿",
+    presenti: []
+  },
+  insalata: {
+    cat: "Contorno", nome: "Insalata Mista", prezzo: "€ 5",
+    desc: "Verdure di stagione, pomodorini, cipolla di tropea, olive e origano.",
+    img: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80",
+    emoji: "🥗",
+    presenti: []
+  },
+  melanzane: {
+    cat: "Contorno", nome: "Melanzane a Funghetto", prezzo: "€ 5",
+    desc: "Melanzane a cubetti in padella con pomodoro, basilico e aglio.",
+    img: "https://images.unsplash.com/photo-1625937286074-9b4e6a95d8e0?w=800&q=80",
+    emoji: "🍆",
+    presenti: []
+  },
+
+  // DOLCI
+  baba: {
+    cat: "Dolce", nome: "Babà al Rum Napoletano", prezzo: "€ 6",
+    desc: "Babà soffice, bagna al rum invecchiato e crema chantilly. Il re della pasticceria napoletana.",
+    img: "https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=800&q=80",
+    emoji: "🍰",
+    presenti: ["Glutine", "Uova", "Latte"]
+  },
+  sfogliatella: {
+    cat: "Dolce", nome: "Sfogliatella Riccia", prezzo: "€ 5",
+    desc: "Sfoglia croccante ripiena di ricotta, semolino, canditi e cannella. Tiepida, come si deve.",
+    img: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&q=80",
+    emoji: "🥐",
+    presenti: ["Glutine", "Uova", "Latte"]
+  },
+  pastiera: {
+    cat: "Dolce", nome: "Pastiera Napoletana", prezzo: "€ 6",
+    desc: "Grano cotto, ricotta, canditi e fior d'arancio. Disponibile tutto l'anno.",
+    img: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&q=80",
+    emoji: "🥧",
+    presenti: ["Glutine", "Uova", "Latte"]
+  },
+  delizia: {
+    cat: "Dolce", nome: "Delizia al Limone", prezzo: "€ 6",
+    desc: "Pan di Spagna, crema al limone di Sorrento e glassa fondente. Fresca e profumata.",
+    img: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&q=80",
+    emoji: "🍋",
+    presenti: ["Glutine", "Uova", "Latte"]
+  },
+  tiramisu: {
+    cat: "Dolce", nome: "Tiramisù della Casa", prezzo: "€ 6",
+    desc: "Savoiardi, mascarpone, caffè napoletano e cacao amaro. Niente panna montata.",
+    img: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=800&q=80",
+    emoji: "☕",
+    presenti: ["Glutine", "Uova", "Latte"]
+  },
+  gelato: {
+    cat: "Dolce", nome: "Gelato Artigianale (2 gusti)", prezzo: "€ 5",
+    desc: "Pistacchio di Bronte, nocciola tonda gentile, stracciatella, limone di Sorrento, cioccolato fondente.",
+    img: "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=800&q=80",
+    emoji: "🍦",
+    presenti: ["Latte", "Uova", "Frutta a guscio"]
+  },
+
+  // BEVANDE
+  vinorosso: {
+    cat: "Bevanda", nome: "Vino della Casa — Rosso", prezzo: "¼ € 4 · ½ € 7 · 1L € 12",
+    desc: "Aglianico del Sannio, Campania IGT. Corposo, tannico, perfetto col ragù.",
+    img: "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800&q=80",
+    emoji: "🍷",
+    presenti: ["Solfiti"]
+  },
+  vinobianco: {
+    cat: "Bevanda", nome: "Vino della Casa — Bianco", prezzo: "¼ € 4 · ½ € 7 · 1L € 12",
+    desc: "Falanghina del Sannio DOC. Fresco, floreale, ideale con pesce e pizza.",
+    img: "https://images.unsplash.com/photo-1566454419290-57a64afe30ac?w=800&q=80",
+    emoji: "🥂",
+    presenti: ["Solfiti"]
+  },
+  birra: {
+    cat: "Bevanda", nome: "Birra Artigianale Napoletana", prezzo: "€ 5",
+    desc: "Birrificio locale, produzione mensile. Chiedi al cameriere il gusto disponibile oggi.",
+    img: "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=800&q=80",
+    emoji: "🍺",
+    presenti: ["Glutine"]
+  },
+  limoncello: {
+    cat: "Bevanda", nome: "Limoncello di Sorrento", prezzo: "€ 4",
+    desc: "Artigianale, limoni di Sorrento IGP, servito ghiacciato.",
+    img: "https://images.unsplash.com/photo-1587314168485-3236d6710814?w=800&q=80",
+    emoji: "🍋",
+    presenti: []
+  },
+  caffe: {
+    cat: "Bevanda", nome: "Caffè Napoletano", prezzo: "€ 1,20",
+    desc: "Miscela Kimbo oro, macinato al momento. Corretto con grappa su richiesta.",
+    img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&q=80",
+    emoji: "☕",
+    presenti: []
+  },
+  acqua: {
+    cat: "Bevanda", nome: "Acqua Minerale", prezzo: "0,5L € 1,50 · 1L € 2,50",
+    desc: "Naturale o frizzante, bottiglia da 0,5L o 1L.",
+    img: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?w=800&q=80",
+    emoji: "💧",
+    presenti: []
+  }
+};
+
+// 14 allergeni EU
+const TUTTI_ALLERGENI = [
+  "Glutine","Crostacei","Uova","Pesce","Arachidi",
+  "Soia","Latte","Frutta a guscio","Sedano","Senape",
+  "Sesamo","Molluschi","Lupini","Solfiti"
+];
+
+// ── MODAL LOGIC ──
+const overlay = document.getElementById('modalOverlay');
+const modalClose = document.getElementById('modalClose');
+
+function openModal(id) {
+  const p = PIATTI[id];
+  if (!p) return;
+
+  // Emoji placeholder
+  const imgWrap = document.getElementById('modalImgWrap');
+  imgWrap.innerHTML = `<div class="modal-img-placeholder">${p.emoji}</div>`;
+
+  document.getElementById('modalCategory').textContent = p.cat;
+  document.getElementById('modalTitle').textContent = p.nome;
+  document.getElementById('modalDesc').textContent = p.desc;
+  document.getElementById('modalPrice').textContent = p.prezzo;
+
+  // Allergeni
+  const grid = document.getElementById('allergeniGrid');
+  grid.innerHTML = TUTTI_ALLERGENI.map(a => {
+    const presente = p.presenti.includes(a);
+    return `<div class="allergene-tag ${presente ? 'present' : 'absent'}">
+      <div class="allergene-dot"></div>
+      ${a}
+    </div>`;
+  }).join('');
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+modalClose.addEventListener('click', closeModal);
+overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// Attach clicks
+document.querySelectorAll('[data-id]').forEach(el => {
+  el.addEventListener('click', () => openModal(el.dataset.id));
+});
+</script>
+</body>
+</html>
